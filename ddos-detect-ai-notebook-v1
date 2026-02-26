@@ -1,0 +1,1293 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "0908b186",
+   "metadata": {
+    "papermill": {
+     "duration": 0.00546,
+     "end_time": "2026-02-26T17:47:55.724852",
+     "exception": false,
+     "start_time": "2026-02-26T17:47:55.719392",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "# **مراجعة واستكشاف البيانات**"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "5782ecaa",
+   "metadata": {
+    "papermill": {
+     "duration": 0.004241,
+     "end_time": "2026-02-26T17:47:55.733584",
+     "exception": false,
+     "start_time": "2026-02-26T17:47:55.729343",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "هاذ الكود بقوم بفتح مجموعة البيانات , الهدف منو فقط نختبر شغالة او لا ونشوف عدد الاعمدة والصفوف"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "id": "8d1916c0",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2026-02-26T17:47:55.745737Z",
+     "iopub.status.busy": "2026-02-26T17:47:55.744820Z",
+     "iopub.status.idle": "2026-02-26T17:49:46.552685Z",
+     "shell.execute_reply": "2026-02-26T17:49:46.551636Z"
+    },
+    "papermill": {
+     "duration": 110.821452,
+     "end_time": "2026-02-26T17:49:46.559269",
+     "exception": false,
+     "start_time": "2026-02-26T17:47:55.737817",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "أبعاد مجموعة البيانات (الأسطر، الأعمدة): (4320541, 88)\n"
+     ]
+    }
+   ],
+   "source": [
+    "import pandas as pd\n",
+    "\n",
+    "# 1. قمنا بالوصول إلى المصدر (Kaggle) وتحديد الملف الأكبر لضمان جودة النتائج\n",
+    "# انسخ مسار الملف من القائمة الجانبية (03-11/Syn.csv)\n",
+    "file_path = '/kaggle/input/datasets/rodrigorosasilva/cic-ddos2019-30gb-full-dataset-csv-files/03-11/Syn.csv'\n",
+    "\n",
+    "# قمنا باستخدام pandas لتحميل البيانات (مع تقليل الذاكرة إذا لزم الأمر)\n",
+    "df = pd.read_csv(file_path, low_memory=False)\n",
+    "print(\"أبعاد مجموعة البيانات (الأسطر، الأعمدة):\", df.shape)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "id": "3ce028f9",
+   "metadata": {
+    "_cell_guid": "b1076dfc-b9ad-4769-8c92-a6c4dae69d19",
+    "_kg_hide-input": true,
+    "_kg_hide-output": true,
+    "_uuid": "8f2839f25d086af736a60e9eeb907d3b93b6e0e5",
+    "execution": {
+     "iopub.execute_input": "2026-02-26T17:49:46.569850Z",
+     "iopub.status.busy": "2026-02-26T17:49:46.569387Z",
+     "iopub.status.idle": "2026-02-26T17:49:46.619596Z",
+     "shell.execute_reply": "2026-02-26T17:49:46.618547Z"
+    },
+    "papermill": {
+     "duration": 0.057798,
+     "end_time": "2026-02-26T17:49:46.621534",
+     "exception": false,
+     "start_time": "2026-02-26T17:49:46.563736",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "أبعاد مجموعة البيانات (الأسطر، الأعمدة): (4320541, 88)\n",
+      "\n",
+      "أول 5 أسطر للتأكد من هيكلية الأعمدة:\n"
+     ]
+    },
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>Unnamed: 0</th>\n",
+       "      <th>Flow ID</th>\n",
+       "      <th>Source IP</th>\n",
+       "      <th>Source Port</th>\n",
+       "      <th>Destination IP</th>\n",
+       "      <th>Destination Port</th>\n",
+       "      <th>Protocol</th>\n",
+       "      <th>Timestamp</th>\n",
+       "      <th>Flow Duration</th>\n",
+       "      <th>Total Fwd Packets</th>\n",
+       "      <th>...</th>\n",
+       "      <th>Active Std</th>\n",
+       "      <th>Active Max</th>\n",
+       "      <th>Active Min</th>\n",
+       "      <th>Idle Mean</th>\n",
+       "      <th>Idle Std</th>\n",
+       "      <th>Idle Max</th>\n",
+       "      <th>Idle Min</th>\n",
+       "      <th>SimillarHTTP</th>\n",
+       "      <th>Inbound</th>\n",
+       "      <th>Label</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>445444</td>\n",
+       "      <td>172.16.0.5-192.168.50.4-9429-9429-6</td>\n",
+       "      <td>172.16.0.5</td>\n",
+       "      <td>9429</td>\n",
+       "      <td>192.168.50.4</td>\n",
+       "      <td>9429</td>\n",
+       "      <td>6</td>\n",
+       "      <td>2018-11-03 11:36:28.607338</td>\n",
+       "      <td>36063894</td>\n",
+       "      <td>7</td>\n",
+       "      <td>...</td>\n",
+       "      <td>29.444864</td>\n",
+       "      <td>52.0</td>\n",
+       "      <td>1.0</td>\n",
+       "      <td>1.202128e+07</td>\n",
+       "      <td>6.253623e+06</td>\n",
+       "      <td>18628035.0</td>\n",
+       "      <td>6193840.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>Syn</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>113842</td>\n",
+       "      <td>172.16.0.5-192.168.50.4-60224-60224-6</td>\n",
+       "      <td>172.16.0.5</td>\n",
+       "      <td>60224</td>\n",
+       "      <td>192.168.50.4</td>\n",
+       "      <td>60224</td>\n",
+       "      <td>6</td>\n",
+       "      <td>2018-11-03 11:36:28.607339</td>\n",
+       "      <td>44851366</td>\n",
+       "      <td>8</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>1.0</td>\n",
+       "      <td>1.0</td>\n",
+       "      <td>2.066268e+07</td>\n",
+       "      <td>1.169783e+07</td>\n",
+       "      <td>28934293.0</td>\n",
+       "      <td>12391060.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>Syn</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>176377</td>\n",
+       "      <td>172.16.0.5-192.168.50.4-33827-11746-6</td>\n",
+       "      <td>192.168.50.4</td>\n",
+       "      <td>11746</td>\n",
+       "      <td>172.16.0.5</td>\n",
+       "      <td>33827</td>\n",
+       "      <td>6</td>\n",
+       "      <td>2018-11-03 11:36:28.607388</td>\n",
+       "      <td>1</td>\n",
+       "      <td>2</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.000000e+00</td>\n",
+       "      <td>0.000000e+00</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>Syn</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>24777</td>\n",
+       "      <td>172.16.0.5-192.168.50.4-33828-1431-6</td>\n",
+       "      <td>172.16.0.5</td>\n",
+       "      <td>33828</td>\n",
+       "      <td>192.168.50.4</td>\n",
+       "      <td>1431</td>\n",
+       "      <td>6</td>\n",
+       "      <td>2018-11-03 11:36:28.607391</td>\n",
+       "      <td>0</td>\n",
+       "      <td>2</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.000000e+00</td>\n",
+       "      <td>0.000000e+00</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>Syn</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>85100</td>\n",
+       "      <td>172.16.0.5-192.168.50.4-5311-5311-6</td>\n",
+       "      <td>172.16.0.5</td>\n",
+       "      <td>5311</td>\n",
+       "      <td>192.168.50.4</td>\n",
+       "      <td>5311</td>\n",
+       "      <td>6</td>\n",
+       "      <td>2018-11-03 11:36:28.607442</td>\n",
+       "      <td>35731470</td>\n",
+       "      <td>8</td>\n",
+       "      <td>...</td>\n",
+       "      <td>33.234019</td>\n",
+       "      <td>48.0</td>\n",
+       "      <td>1.0</td>\n",
+       "      <td>1.191047e+07</td>\n",
+       "      <td>1.849493e+06</td>\n",
+       "      <td>13693985.0</td>\n",
+       "      <td>10001398.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>Syn</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "<p>5 rows × 88 columns</p>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "   Unnamed: 0                                Flow ID     Source IP  \\\n",
+       "0      445444    172.16.0.5-192.168.50.4-9429-9429-6    172.16.0.5   \n",
+       "1      113842  172.16.0.5-192.168.50.4-60224-60224-6    172.16.0.5   \n",
+       "2      176377  172.16.0.5-192.168.50.4-33827-11746-6  192.168.50.4   \n",
+       "3       24777   172.16.0.5-192.168.50.4-33828-1431-6    172.16.0.5   \n",
+       "4       85100    172.16.0.5-192.168.50.4-5311-5311-6    172.16.0.5   \n",
+       "\n",
+       "    Source Port  Destination IP   Destination Port   Protocol  \\\n",
+       "0          9429    192.168.50.4               9429          6   \n",
+       "1         60224    192.168.50.4              60224          6   \n",
+       "2         11746      172.16.0.5              33827          6   \n",
+       "3         33828    192.168.50.4               1431          6   \n",
+       "4          5311    192.168.50.4               5311          6   \n",
+       "\n",
+       "                    Timestamp   Flow Duration   Total Fwd Packets  ...  \\\n",
+       "0  2018-11-03 11:36:28.607338        36063894                   7  ...   \n",
+       "1  2018-11-03 11:36:28.607339        44851366                   8  ...   \n",
+       "2  2018-11-03 11:36:28.607388               1                   2  ...   \n",
+       "3  2018-11-03 11:36:28.607391               0                   2  ...   \n",
+       "4  2018-11-03 11:36:28.607442        35731470                   8  ...   \n",
+       "\n",
+       "    Active Std   Active Max   Active Min     Idle Mean      Idle Std  \\\n",
+       "0    29.444864         52.0          1.0  1.202128e+07  6.253623e+06   \n",
+       "1     0.000000          1.0          1.0  2.066268e+07  1.169783e+07   \n",
+       "2     0.000000          0.0          0.0  0.000000e+00  0.000000e+00   \n",
+       "3     0.000000          0.0          0.0  0.000000e+00  0.000000e+00   \n",
+       "4    33.234019         48.0          1.0  1.191047e+07  1.849493e+06   \n",
+       "\n",
+       "     Idle Max    Idle Min  SimillarHTTP   Inbound   Label  \n",
+       "0  18628035.0   6193840.0             0         1     Syn  \n",
+       "1  28934293.0  12391060.0             0         1     Syn  \n",
+       "2         0.0         0.0             0         0     Syn  \n",
+       "3         0.0         0.0             0         1     Syn  \n",
+       "4  13693985.0  10001398.0             0         1     Syn  \n",
+       "\n",
+       "[5 rows x 88 columns]"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "\n",
+    "#  مراجعة مدى سلامة وملاءمة البيانات\n",
+    "print(\"أبعاد مجموعة البيانات (الأسطر، الأعمدة):\", df.shape)\n",
+    "print(\"\\nأول 5 أسطر للتأكد من هيكلية الأعمدة:\")\n",
+    "display(df.head())"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "6fe8de2a",
+   "metadata": {
+    "papermill": {
+     "duration": 0.004584,
+     "end_time": "2026-02-26T17:49:46.631000",
+     "exception": false,
+     "start_time": "2026-02-26T17:49:46.626416",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "**التحقق من القيم المتكررة**"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "id": "95e50f0b",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2026-02-26T17:49:46.641619Z",
+     "iopub.status.busy": "2026-02-26T17:49:46.641327Z",
+     "iopub.status.idle": "2026-02-26T17:50:32.613092Z",
+     "shell.execute_reply": "2026-02-26T17:50:32.611782Z"
+    },
+    "papermill": {
+     "duration": 45.984418,
+     "end_time": "2026-02-26T17:50:32.619913",
+     "exception": false,
+     "start_time": "2026-02-26T17:49:46.635495",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "1. Total missing values in the data: 94\n",
+      "\n",
+      "2. Distribution of Attack Types (Labels):\n",
+      " Label\n",
+      "Syn       4284751\n",
+      "BENIGN      35790\n",
+      "\n",
+      "3. Total duplicate records: 482799\n"
+     ]
+    }
+   ],
+   "source": [
+    "# 1. التحقق من القيم المفقودة (Missing Values)\n",
+    "missing_values = df.isnull().sum().sum()\n",
+    "print(f\"1. Total missing values in the data: {missing_values}\")\n",
+    "\n",
+    "# 2. فحص توازن البيانات (Class Balance)\n",
+    "print(\"\\n2. Distribution of Attack Types (Labels):\")\n",
+    "# استخدام to_string() يحذف الـ dtype والـ Name من الأسفل ليكون الشكل أنظف\n",
+    "print(df[' Label'].value_counts().to_string())\n",
+    "\n",
+    "# 3. التحقق من وجود بيانات متكررة (Duplicates)\n",
+    "duplicates = df.duplicated().sum()\n",
+    "print(f\"\\n3. Total duplicate records: {duplicates}\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "8f55c08a",
+   "metadata": {
+    "papermill": {
+     "duration": 0.004771,
+     "end_time": "2026-02-26T17:50:32.629708",
+     "exception": false,
+     "start_time": "2026-02-26T17:50:32.624937",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "# **المعالجة الفنية وتنظيف البيانات**"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "0c7063f4",
+   "metadata": {
+    "papermill": {
+     "duration": 0.004613,
+     "end_time": "2026-02-26T17:50:32.639103",
+     "exception": false,
+     "start_time": "2026-02-26T17:50:32.634490",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "**التحقق من صحة البيانات**"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "id": "270669f8",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2026-02-26T17:50:32.651523Z",
+     "iopub.status.busy": "2026-02-26T17:50:32.650368Z",
+     "iopub.status.idle": "2026-02-26T17:50:35.440986Z",
+     "shell.execute_reply": "2026-02-26T17:50:35.439847Z"
+    },
+    "papermill": {
+     "duration": 2.799122,
+     "end_time": "2026-02-26T17:50:35.443087",
+     "exception": false,
+     "start_time": "2026-02-26T17:50:32.643965",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "1. فحص أنواع البيانات (Data Types):\n",
+      "Unnamed: 0             int64\n",
+      "Flow ID               object\n",
+      " Source IP            object\n",
+      " Source Port           int64\n",
+      " Destination IP       object\n",
+      " Destination Port      int64\n",
+      " Protocol              int64\n",
+      " Timestamp            object\n",
+      " Flow Duration         int64\n",
+      " Total Fwd Packets     int64\n",
+      "dtype: object\n",
+      "\n",
+      "2. عدد القيم اللانهائية المكتشفة: 566058\n",
+      "\n",
+      "3. عدد السجلات ذات الوقت السالب (خطأ منطقي): 0\n"
+     ]
+    }
+   ],
+   "source": [
+    "# 1. فحص أنواع البيانات لجميع الأعمدة\n",
+    "# نركز على أول 10 أعمدة كمثال للسكرين شوت\n",
+    "print(\"1. فحص أنواع البيانات (Data Types):\")\n",
+    "print(df.dtypes.head(10))\n",
+    "\n",
+    "# 2. البحث عن القيم اللانهائية (Infinite values)\n",
+    "# هذه القيم شائعة في بيانات CIC-DDoS2019 وتسبب فشل الموديل\n",
+    "import numpy as np\n",
+    "inf_count = np.isinf(df.select_dtypes(include=np.number)).sum().sum()\n",
+    "print(f\"\\n2. عدد القيم اللانهائية المكتشفة: {inf_count}\")\n",
+    "\n",
+    "# 3. فحص القيم السالبة في الأعمدة التي يجب أن تكون موجبة (مثال: Flow Duration)\n",
+    "negative_duration = (df[' Flow Duration'] < 0).sum()\n",
+    "print(f\"\\n3. عدد السجلات ذات الوقت السالب (خطأ منطقي): {negative_duration}\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "9a46cf23",
+   "metadata": {
+    "papermill": {
+     "duration": 0.0047,
+     "end_time": "2026-02-26T17:50:35.452882",
+     "exception": false,
+     "start_time": "2026-02-26T17:50:35.448182",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "**اختيار الخصائص (حذف الأعمدة غير الضرورية)**"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "id": "3c7276fa",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2026-02-26T17:50:35.465379Z",
+     "iopub.status.busy": "2026-02-26T17:50:35.464674Z",
+     "iopub.status.idle": "2026-02-26T17:50:48.417754Z",
+     "shell.execute_reply": "2026-02-26T17:50:48.416644Z"
+    },
+    "papermill": {
+     "duration": 12.961731,
+     "end_time": "2026-02-26T17:50:48.419774",
+     "exception": false,
+     "start_time": "2026-02-26T17:50:35.458043",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "عدد الأعمدة ذات القيمة الواحدة المكتشفة: 12\n",
+      "\n",
+      "تم الحذف بنجاح.\n",
+      "عدد الأعمدة المتبقية في الجلسة الحالية: 71\n",
+      "تم بنجاح حذف الأعمدة التالية: ['Fwd Avg Packets/Bulk', 'Source IP', 'Fwd Avg Bytes/Bulk', 'Timestamp', 'Flow ID', 'Unnamed: 0', 'Bwd Avg Bulk Rate', 'Bwd URG Flags', 'FIN Flag Count', 'Fwd URG Flags', 'PSH Flag Count', 'Bwd Avg Bytes/Bulk', 'Destination IP', 'Bwd PSH Flags', 'Bwd Avg Packets/Bulk', 'Fwd Avg Bulk Rate', 'ECE Flag Count']\n"
+     ]
+    }
+   ],
+   "source": [
+    "# 1. تنظيف أسماء الأعمدة من أي فراغات زائدة (مهم جداً لتجنب الـ KeyError)\n",
+    "df.columns = df.columns.str.strip()\n",
+    "\n",
+    "# 2. الآن القائمة ستعمل بشكل صحيح لأن الأسماء أصبحت نظيفة\n",
+    "cols_to_drop = ['Unnamed: 0', 'Flow ID', 'Timestamp', 'Destination IP', 'Source IP']\n",
+    "\n",
+    "# 3. البحث عن الأعمدة ذات القيمة الواحدة (Constant Columns) مرة أخرى بعد تنظيف الأسماء\n",
+    "constant_cols = [col for col in df.columns if df[col].nunique() <= 1]\n",
+    "print(f\"عدد الأعمدة ذات القيمة الواحدة المكتشفة: {len(constant_cols)}\")\n",
+    "\n",
+    "# دمج القائمة\n",
+    "final_drop_list = list(set(cols_to_drop + constant_cols))\n",
+    "\n",
+    "# --- اا: الحذف مباشرة في المتغير الأصلي لضمان ثبات البيانات ---\n",
+    "df.drop(columns=final_drop_list, inplace=True)\n",
+    "\n",
+    "print(f\"\\nتم الحذف بنجاح.\")\n",
+    "print(f\"عدد الأعمدة المتبقية في الجلسة الحالية: {df.shape[1]}\")\n",
+    "print(f\"تم بنجاح حذف الأعمدة التالية: {final_drop_list}\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "323f1129",
+   "metadata": {
+    "papermill": {
+     "duration": 0.004895,
+     "end_time": "2026-02-26T17:50:48.429701",
+     "exception": false,
+     "start_time": "2026-02-26T17:50:48.424806",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "**تنظيف القيم اللانهائية والفارغة**"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "id": "1d2cf316",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2026-02-26T17:50:48.441341Z",
+     "iopub.status.busy": "2026-02-26T17:50:48.440968Z",
+     "iopub.status.idle": "2026-02-26T17:50:54.129053Z",
+     "shell.execute_reply": "2026-02-26T17:50:54.127954Z"
+    },
+    "papermill": {
+     "duration": 5.696382,
+     "end_time": "2026-02-26T17:50:54.131015",
+     "exception": false,
+     "start_time": "2026-02-26T17:50:48.434633",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "إجمالي القيم المفقودة واللانهائية المتبقية: 0\n",
+      "أبعاد مجموعة البيانات بعد التنظيف النهائي: (4037465, 71)\n"
+     ]
+    }
+   ],
+   "source": [
+    "import numpy as np\n",
+    "\n",
+    "# 1. استبدال القيم اللانهائية (Positive & Negative Infinity) بقيم فارغة (NaN)\n",
+    "# نستخدم inplace=True لضمان التعديل المباشر في الذاكرة\n",
+    "df.replace([np.inf, -np.inf], np.nan, inplace=True)\n",
+    "\n",
+    "# 2. حذف جميع الصفوف التي تحتوي على قيم فارغة (بما فيها التي كانت لانهائية)\n",
+    "df.dropna(inplace=True)\n",
+    "\n",
+    "# 3. التحقق من نجاح العملية\n",
+    "print(f\"إجمالي القيم المفقودة واللانهائية المتبقية: {df.isnull().sum().sum()}\")\n",
+    "print(f\"أبعاد مجموعة البيانات بعد التنظيف النهائي: {df.shape}\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "c9bfdb0a",
+   "metadata": {
+    "papermill": {
+     "duration": 0.005217,
+     "end_time": "2026-02-26T17:50:54.141764",
+     "exception": false,
+     "start_time": "2026-02-26T17:50:54.136547",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "**تنقية وموازنة البيانات**"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "id": "ab3cb800",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2026-02-26T17:50:54.153993Z",
+     "iopub.status.busy": "2026-02-26T17:50:54.153281Z",
+     "iopub.status.idle": "2026-02-26T17:51:23.697950Z",
+     "shell.execute_reply": "2026-02-26T17:51:23.696428Z"
+    },
+    "papermill": {
+     "duration": 29.553138,
+     "end_time": "2026-02-26T17:51:23.700060",
+     "exception": false,
+     "start_time": "2026-02-26T17:50:54.146922",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "تمت التنقية بنجاح.\n",
+      "الأبعاد النهائية بعد إزالة التكرار والموازنة: (131014, 71)\n",
+      "\n",
+      "توزيع الـ Label الجديد:\n",
+      "Label\n",
+      "Syn       100000\n",
+      "BENIGN     31014\n"
+     ]
+    }
+   ],
+   "source": [
+    "# 1. إزالة السجلات المتكررة نهائياً\n",
+    "df.drop_duplicates(inplace=True)\n",
+    "\n",
+    "# 2. موازنة البيانات: فصل الهجوم عن الحركة الطبيعية\n",
+    "df_syn = df[df['Label'] == 'Syn']\n",
+    "df_benign = df[df['Label'] == 'BENIGN']\n",
+    "\n",
+    "# سنأخذ عينة من الـ Syn (مثلاً 100,000 سطر) لدمجها مع الـ Benign\n",
+    "# random_state=42 لضمان الحصول على نفس النتائج في كل مرة (Reproducibility)\n",
+    "df_syn_sampled = df_syn.sample(n=100000, random_state=42)\n",
+    "\n",
+    "# 3. دمج المجموعات لتكوين مجموعة البيانات النهائية المنقحة\n",
+    "df_balanced = pd.concat([df_syn_sampled, df_benign])\n",
+    "\n",
+    "# تحديث المتغير الأصلي بالنسخة الموازنة والمنقحة\n",
+    "df = df_balanced.copy()\n",
+    "\n",
+    "print(f\"تمت التنقية بنجاح.\")\n",
+    "print(f\"الأبعاد النهائية بعد إزالة التكرار والموازنة: {df.shape}\")\n",
+    "print(f\"\\nتوزيع الـ Label الجديد:\")\n",
+    "print(df['Label'].value_counts().to_string())"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "dc8b7270",
+   "metadata": {
+    "papermill": {
+     "duration": 0.004983,
+     "end_time": "2026-02-26T17:51:23.710380",
+     "exception": false,
+     "start_time": "2026-02-26T17:51:23.705397",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "**دمج وتجميع البيانات**"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "id": "e2d13c51",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2026-02-26T17:51:23.722567Z",
+     "iopub.status.busy": "2026-02-26T17:51:23.722141Z",
+     "iopub.status.idle": "2026-02-26T17:51:28.253255Z",
+     "shell.execute_reply": "2026-02-26T17:51:28.252130Z"
+    },
+    "papermill": {
+     "duration": 4.539959,
+     "end_time": "2026-02-26T17:51:28.255281",
+     "exception": false,
+     "start_time": "2026-02-26T17:51:23.715322",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "تمت عملية الدمج والتجميع بنجاح.\n",
+      "الأبعاد النهائية للمجموعة الموحدة: (131206, 71)\n",
+      "\n",
+      "توزيع الـ Label النهائي:\n",
+      "Label\n",
+      "Syn       100000\n",
+      "BENIGN     31206\n"
+     ]
+    }
+   ],
+   "source": [
+    "# 1. تحديد مسار الملف الثاني (LDAP) ومصدر الأعمدة الصحيحة\n",
+    "file_path_extra = '/kaggle/input/datasets/rodrigorosasilva/cic-ddos2019-30gb-full-dataset-csv-files/03-11/LDAP.csv'\n",
+    "\n",
+    "# 2. قراءة عينة من الملف الثاني (مثلاً أول 200,000 سطر للبحث عن Benign)\n",
+    "df_extra = pd.read_csv(file_path_extra, nrows=200000, low_memory=False)\n",
+    "\n",
+    "# 3. تنظيف وتوافق الأعمدة (مهم جداً لتجنب أخطاء التدريب)\n",
+    "df_extra.columns = df_extra.columns.str.strip() # تنظيف الفراغات\n",
+    "df_extra = df_extra[df_extra['Label'] == 'BENIGN'] # استخراج الحركة الطبيعية فقط\n",
+    "\n",
+    "# 4. مطابقة الأعمدة: الاحتفاظ فقط بالأعمدة الموجودة في ملفنا الحالي (df)\n",
+    "# هذا يضمن عدم وجود أعمدة زائدة أو ناقصة تسبب KeyError لاحقاً\n",
+    "df_extra = df_extra[df.columns] \n",
+    "\n",
+    "# 5. عملية الدمج الحقيقي (Aggregating)\n",
+    "df = pd.concat([df, df_extra], ignore_index=True)\n",
+    "\n",
+    "# 6. إزالة أي تكرار قد يكون نتج عن الدمج\n",
+    "df.drop_duplicates(inplace=True)\n",
+    "\n",
+    "print(\"تمت عملية الدمج والتجميع بنجاح.\")\n",
+    "print(f\"الأبعاد النهائية للمجموعة الموحدة: {df.shape}\")\n",
+    "print(\"\\nتوزيع الـ Label النهائي:\")\n",
+    "print(df['Label'].value_counts().to_string())"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "3d367bcd",
+   "metadata": {
+    "papermill": {
+     "duration": 0.00488,
+     "end_time": "2026-02-26T17:51:28.265500",
+     "exception": false,
+     "start_time": "2026-02-26T17:51:28.260620",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "**ترميز البيانات**"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "id": "4078b0fe",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2026-02-26T17:51:28.277115Z",
+     "iopub.status.busy": "2026-02-26T17:51:28.276633Z",
+     "iopub.status.idle": "2026-02-26T17:51:28.346589Z",
+     "shell.execute_reply": "2026-02-26T17:51:28.345690Z"
+    },
+    "papermill": {
+     "duration": 0.079037,
+     "end_time": "2026-02-26T17:51:28.349408",
+     "exception": false,
+     "start_time": "2026-02-26T17:51:28.270371",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "محتوى العمود الحالي قبل الترميز:\n",
+      "Label\n",
+      "Syn       100000\n",
+      "BENIGN     31206\n",
+      "Name: count, dtype: int64\n",
+      "\n",
+      "--- نتيجة الترميز النهائية ---\n",
+      "القيم الفريدة في Label: [1 0]\n",
+      "Label\n",
+      "1    100000\n",
+      "0     31206\n",
+      "Name: count, dtype: int64\n"
+     ]
+    }
+   ],
+   "source": [
+    "# 1. تفعيل الخيار لإخفاء التنبيه والموافقة على السلوك المستقبلي\n",
+    "pd.set_option('future.no_silent_downcasting', True)\n",
+    "# 2. تنظيف شامل لأسماء الأعمدة والقيم داخل عمود Label من الفراغات\n",
+    "df.columns = df.columns.str.strip()\n",
+    "if df['Label'].dtype == 'object':\n",
+    "    df['Label'] = df['Label'].str.strip()\n",
+    "\n",
+    "# 3. فحص محتوى العمود قبل أي إجراء (عشان نعرف شو فيه)\n",
+    "print(\"محتوى العمود الحالي قبل الترميز:\")\n",
+    "print(df['Label'].value_counts())\n",
+    "\n",
+    "# 4. عملية الترميز الذكية:\n",
+    "# سنستخدم replace بدل map لأنها لا تحذف القيم التي لا تجدها (أكثر أماناً)\n",
+    "df['Label'] = df['Label'].replace({'Syn': 1, 'BENIGN': 0})\n",
+    "\n",
+    "# 5. التأكد النهائي\n",
+    "print(\"\\n--- نتيجة الترميز النهائية ---\")\n",
+    "unique_vals = df['Label'].unique()\n",
+    "print(f\"القيم الفريدة في Label: {unique_vals}\")\n",
+    "print(df['Label'].value_counts())\n",
+    "\n",
+    "# إذا طلع العمود لسه فاضي، معناها df نفسه صار فاضي من الخطوات اللي قبل\n",
+    "if len(df) == 0:\n",
+    "    print(\"\\n⚠️ تنبيه: الـ Dataframe فارغ تماماً! نحتاج لإعادة قراءة البيانات.\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "d7b7a479",
+   "metadata": {
+    "papermill": {
+     "duration": 0.005631,
+     "end_time": "2026-02-26T17:51:28.360328",
+     "exception": false,
+     "start_time": "2026-02-26T17:51:28.354697",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "**قياس البيانات الشاذة ومعالجتها**"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "id": "61787f49",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2026-02-26T17:51:28.372990Z",
+     "iopub.status.busy": "2026-02-26T17:51:28.372517Z",
+     "iopub.status.idle": "2026-02-26T17:51:28.810483Z",
+     "shell.execute_reply": "2026-02-26T17:51:28.809307Z"
+    },
+    "papermill": {
+     "duration": 0.446898,
+     "end_time": "2026-02-26T17:51:28.812513",
+     "exception": false,
+     "start_time": "2026-02-26T17:51:28.365615",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "--- تقرير معالجة القيم الشاذة المنفصلة ---\n",
+      "عدد سجلات BENIGN (قبل: 31206 | بعد: 8063)\n",
+      "عدد سجلات Syn (قبل: 100000 | بعد: 58904)\n",
+      "الأبعاد النهائية لـ df: (66967, 71)\n"
+     ]
+    }
+   ],
+   "source": [
+    "import numpy as np\n",
+    "\n",
+    "# 1. فصل البيانات لضمان عدم حذف الفئة الصغرى\n",
+    "df_benign = df[df['Label'] == 0]\n",
+    "df_syn = df[df['Label'] == 1]\n",
+    "\n",
+    "# 2. دالة تنظيف القيم الشاذة (IQR)\n",
+    "def clean_outliers(data):\n",
+    "    # نختار الأعمدة الرقمية ونستثني عمود Label\n",
+    "    numeric_cols = data.select_dtypes(include=[np.number]).columns\n",
+    "    cols_to_check = [c for c in numeric_cols if c != 'Label']\n",
+    "    \n",
+    "    Q1 = data[cols_to_check].quantile(0.25)\n",
+    "    Q3 = data[cols_to_check].quantile(0.75)\n",
+    "    IQR = Q3 - Q1\n",
+    "    \n",
+    "    # تحديد الحدود\n",
+    "    lower = Q1 - 1.5 * IQR\n",
+    "    upper = Q3 + 1.5 * IQR\n",
+    "    \n",
+    "    # الفلترة: الاحتفاظ بالسجلات داخل الحدود فقط\n",
+    "    return data[~((data[cols_to_check] < lower) | (data[cols_to_check] > upper)).any(axis=1)]\n",
+    "\n",
+    "# 3. تنظيف كل فئة بشكل مستقل (هنا السر!)\n",
+    "df_benign_cleaned = clean_outliers(df_benign)\n",
+    "df_syn_cleaned = clean_outliers(df_syn)\n",
+    "\n",
+    "# 4. دمج البيانات المنظفة من الطرفين وتحديث المتغير الأساسي\n",
+    "df = pd.concat([df_benign_cleaned, df_syn_cleaned], ignore_index=True)\n",
+    "\n",
+    "# 5. التقرير النهائي\n",
+    "print(\"--- تقرير معالجة القيم الشاذة المنفصلة ---\")\n",
+    "print(f\"عدد سجلات BENIGN (قبل: {len(df_benign)} | بعد: {len(df_benign_cleaned)})\")\n",
+    "print(f\"عدد سجلات Syn (قبل: {len(df_syn)} | بعد: {len(df_syn_cleaned)})\")\n",
+    "print(f\"الأبعاد النهائية لـ df: {df.shape}\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "id": "a55f1d0d",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2026-02-26T17:51:28.825538Z",
+     "iopub.status.busy": "2026-02-26T17:51:28.825167Z",
+     "iopub.status.idle": "2026-02-26T17:51:28.832452Z",
+     "shell.execute_reply": "2026-02-26T17:51:28.831479Z"
+    },
+    "papermill": {
+     "duration": 0.015976,
+     "end_time": "2026-02-26T17:51:28.834341",
+     "exception": false,
+     "start_time": "2026-02-26T17:51:28.818365",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[0 1]\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(df['Label'].unique())"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "63f7969f",
+   "metadata": {
+    "papermill": {
+     "duration": 0.005192,
+     "end_time": "2026-02-26T17:51:28.845040",
+     "exception": false,
+     "start_time": "2026-02-26T17:51:28.839848",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "**توحيد المقاييس**"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "id": "19333822",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2026-02-26T17:51:28.857379Z",
+     "iopub.status.busy": "2026-02-26T17:51:28.856860Z",
+     "iopub.status.idle": "2026-02-26T17:51:30.683395Z",
+     "shell.execute_reply": "2026-02-26T17:51:30.682308Z"
+    },
+    "papermill": {
+     "duration": 1.835113,
+     "end_time": "2026-02-26T17:51:30.685373",
+     "exception": false,
+     "start_time": "2026-02-26T17:51:28.850260",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "--- تقرير توحيد المقاييس النهائي ---\n",
+      "تمت معالجة 69 عموداً رقمياً بنجاح.\n",
+      "النطاق الجديد للبيانات: من 0.0 إلى 1.0000000000000002\n",
+      "أبعاد الميزات (Features) الجاهزة: (66967, 69)\n"
+     ]
+    }
+   ],
+   "source": [
+    "from sklearn.preprocessing import MinMaxScaler\n",
+    "import pandas as pd\n",
+    "\n",
+    "# 1. تحديد الأعمدة الرقمية فقط (تلقائياً) واستثناء عمود Label\n",
+    "# هذا السطر يضمن استبعاد الـ IPs وأي نصوص تسبب الـ ValueError\n",
+    "X = df.drop(columns=['Label']).select_dtypes(include=['number'])\n",
+    "y = df['Label']\n",
+    "\n",
+    "# 2. تعريف أداة القياس (Scaler)\n",
+    "scaler = MinMaxScaler()\n",
+    "\n",
+    "# 3. تطبيق التوحيد (Scaling)\n",
+    "# الآن سيعمل الكود بسلاسة لأن كل المدخلات أرقام\n",
+    "X_scaled = scaler.fit_transform(X)\n",
+    "\n",
+    "# 4. تحويل النتائج إلى DataFrame مع الحفاظ على أسماء الأعمدة الرقمية\n",
+    "X_final = pd.DataFrame(X_scaled, columns=X.columns)\n",
+    "\n",
+    "print(\"--- تقرير توحيد المقاييس النهائي ---\")\n",
+    "print(f\"تمت معالجة {X_final.shape[1]} عموداً رقمياً بنجاح.\")\n",
+    "print(f\"النطاق الجديد للبيانات: من {X_final.min().min()} إلى {X_final.max().max()}\")\n",
+    "print(f\"أبعاد الميزات (Features) الجاهزة: {X_final.shape}\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "5644abad",
+   "metadata": {
+    "papermill": {
+     "duration": 0.007033,
+     "end_time": "2026-02-26T17:51:30.697828",
+     "exception": false,
+     "start_time": "2026-02-26T17:51:30.690795",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "**تقسيم المجموعات الى تدريب والتحقق والاختبار**"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "id": "14a2b15e",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2026-02-26T17:51:30.710924Z",
+     "iopub.status.busy": "2026-02-26T17:51:30.710310Z",
+     "iopub.status.idle": "2026-02-26T17:51:30.947537Z",
+     "shell.execute_reply": "2026-02-26T17:51:30.946285Z"
+    },
+    "papermill": {
+     "duration": 0.246235,
+     "end_time": "2026-02-26T17:51:30.949565",
+     "exception": false,
+     "start_time": "2026-02-26T17:51:30.703330",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "-----------------------------------\n",
+      "✅ تم تقسيم المجموعات بنجاح:\n",
+      "-----------------------------------\n",
+      "🔹 مجموعة التدريب (70%): 46876 سجل\n",
+      "🔹 مجموعة التحقق  (15%): 10045 سجل\n",
+      "🔹 مجموعة الاختبار (15%): 10046 سجل\n",
+      "-----------------------------------\n",
+      "إجمالي السجلات: 66967\n"
+     ]
+    }
+   ],
+   "source": [
+    "import pandas as pd\n",
+    "import numpy as np\n",
+    "from sklearn.model_selection import train_test_split\n",
+    "\n",
+    "# التأكد من أن البيانات موجودة قبل البدء\n",
+    "try:\n",
+    "    # 1. المرحلة الأولى: تقسيم 70% تدريب و 30% للبقية\n",
+    "    X_train, X_temp, y_train, y_temp = train_test_split(\n",
+    "        X_final, y, test_size=0.30, random_state=42, stratify=y\n",
+    "    )\n",
+    "\n",
+    "    # 2. المرحلة الثانية: تقسيم الـ 30% المتبقية إلى (15% تحقق و 15% اختبار)\n",
+    "    X_val, X_test, y_val, y_test = train_test_split(\n",
+    "        X_temp, y_temp, test_size=0.50, random_state=42, stratify=y_temp\n",
+    "    )\n",
+    "\n",
+    "    # 3. طباعة النتائج بالأرقام الفعلية\n",
+    "    print(\"-\" * 35)\n",
+    "    print(\"✅ تم تقسيم المجموعات بنجاح:\")\n",
+    "    print(\"-\" * 35)\n",
+    "    print(f\"🔹 مجموعة التدريب (70%): {len(X_train)} سجل\")\n",
+    "    print(f\"🔹 مجموعة التحقق  (15%): {len(X_val)} سجل\")\n",
+    "    print(f\"🔹 مجموعة الاختبار (15%): {len(X_test)} سجل\")\n",
+    "    print(\"-\" * 35)\n",
+    "    print(f\"إجمالي السجلات: {len(X_train) + len(X_val) + len(X_test)}\")\n",
+    "\n",
+    "except NameError as e:\n",
+    "    print(f\"❌ خطأ: المتغيرات غير موجودة. تأكد من تشغيل خلايا الـ Scaling و y أولاً. ({e})\")\n",
+    "except Exception as e:\n",
+    "    print(f\"❌ حدث خطأ غير متوقع: {e}\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "id": "4c5ab496",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2026-02-26T17:51:30.964091Z",
+     "iopub.status.busy": "2026-02-26T17:51:30.963235Z",
+     "iopub.status.idle": "2026-02-26T17:51:30.977442Z",
+     "shell.execute_reply": "2026-02-26T17:51:30.976402Z"
+    },
+    "papermill": {
+     "duration": 0.024215,
+     "end_time": "2026-02-26T17:51:30.979538",
+     "exception": false,
+     "start_time": "2026-02-26T17:51:30.955323",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "توزيع الفئات في التدريب:\n",
+      " Label\n",
+      "1    0.879597\n",
+      "0    0.120403\n",
+      "Name: proportion, dtype: float64\n",
+      "\n",
+      "توزيع الفئات في التحقق:\n",
+      " Label\n",
+      "1    0.879642\n",
+      "0    0.120358\n",
+      "Name: proportion, dtype: float64\n",
+      "\n",
+      "توزيع الفئات في الاختبار:\n",
+      " Label\n",
+      "1    0.879554\n",
+      "0    0.120446\n",
+      "Name: proportion, dtype: float64\n"
+     ]
+    }
+   ],
+   "source": [
+    "# فحص توزيع الفئات (0 و 1) في كل مجموعة\n",
+    "print(\"توزيع الفئات في التدريب:\\n\", y_train.value_counts(normalize=True))\n",
+    "print(\"\\nتوزيع الفئات في التحقق:\\n\", y_val.value_counts(normalize=True))\n",
+    "print(\"\\nتوزيع الفئات في الاختبار:\\n\", y_test.value_counts(normalize=True))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "313c9104",
+   "metadata": {
+    "papermill": {
+     "duration": 0.005442,
+     "end_time": "2026-02-26T17:51:30.990930",
+     "exception": false,
+     "start_time": "2026-02-26T17:51:30.985488",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "**حفظ مجموعة البيانات المنقحة والمنظفة**"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "id": "9dbf9b3e",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2026-02-26T17:51:31.003936Z",
+     "iopub.status.busy": "2026-02-26T17:51:31.003231Z",
+     "iopub.status.idle": "2026-02-26T17:51:33.545349Z",
+     "shell.execute_reply": "2026-02-26T17:51:33.544305Z"
+    },
+    "papermill": {
+     "duration": 2.551053,
+     "end_time": "2026-02-26T17:51:33.547392",
+     "exception": false,
+     "start_time": "2026-02-26T17:51:30.996339",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "df.to_csv('final_processed_dataset.csv', index=False)"
+   ]
+  }
+ ],
+ "metadata": {
+  "kaggle": {
+   "accelerator": "none",
+   "dataSources": [
+    {
+     "databundleVersionId": 6964412,
+     "datasetId": 3952124,
+     "sourceId": 6878499,
+     "sourceType": "datasetVersion"
+    }
+   ],
+   "dockerImageVersionId": 31286,
+   "isGpuEnabled": false,
+   "isInternetEnabled": false,
+   "language": "python",
+   "sourceType": "notebook"
+  },
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.12.12"
+  },
+  "papermill": {
+   "default_parameters": {},
+   "duration": 222.185409,
+   "end_time": "2026-02-26T17:51:34.275900",
+   "environment_variables": {},
+   "exception": null,
+   "input_path": "__notebook__.ipynb",
+   "output_path": "__notebook__.ipynb",
+   "parameters": {},
+   "start_time": "2026-02-26T17:47:52.090491",
+   "version": "2.6.0"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
